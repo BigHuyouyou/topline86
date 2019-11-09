@@ -1,7 +1,7 @@
 module.exports = {
   lintOnSave: true,
-  devServer:{
-    open:true,
-    port:26789
+  devServer: {
+    open: true,
+    port: 26789
   }
 }
