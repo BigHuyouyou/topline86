@@ -14,7 +14,7 @@
           <span>我已阅读并同意用户协议和隐私条款</span>
         </el-form-item>
         <el-form-item>
-          <el-button style="width:100%;" type="primary"  @click="login()">登录</el-button>
+          <el-button style="width:100%;" type="primary"  @click="login">登录</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -30,7 +30,7 @@ export default {
         code: '',
         xieyi: false
       },
-
+      // 自然校验，验证有值，并且手机号符合标准
       loginFormRules: {
         mobile: [
           { required: true, message: '手机号必填' },
@@ -46,7 +46,11 @@ export default {
   },
   methods: {
     login () {
-      this.$router.push('/home')
+      this.$refs.loginFormRef.validate(valid => {
+        if (valid) {
+          this.$router.push('/home')
+        }
+      })
     }
   }
 }
