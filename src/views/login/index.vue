@@ -1,12 +1,12 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <el-form ref="loginFormRef" :model="loginForm">
+      <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules">
         <img src="./logo_index.png" alt="">
-        <el-form-item>
+        <el-form-item prop="mobile">
           <el-input v-model="loginForm.mobile" placeholder="请输入手机号码"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="code">
           <el-input v-model="loginForm.code" placeholder="请输入校验码"></el-input>
         </el-form-item>
         <el-form-item style="text-align:left;">
@@ -29,7 +29,19 @@ export default {
         mobile: '',
         code: '',
         xieyi: false
+      },
+
+      loginFormRules: {
+        mobile: [
+          { required: true, message: '手机号必填' },
+          { pattern: /^1[35789]\d{9}$/, message: '手机号码格式不对' }
+        ],
+        code: [
+          { required: true, message: '验证码必填' }
+        ]
+
       }
+
     }
   },
   methods: {
