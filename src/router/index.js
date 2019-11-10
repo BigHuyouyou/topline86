@@ -22,4 +22,14 @@ const router = new VueRouter({
   routes
 })
 
+// 路由守卫
+router.beforeEach((to, from, next) => {
+  var userinfo = window.sessionStorage.getItem('userinfo')
+  if (!userinfo && to.path !== '/login') {
+    // 路由导航到登录页面
+    return next('/login')// ok
+  }
+  next()
+})
+
 export default router
