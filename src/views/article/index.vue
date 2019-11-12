@@ -8,11 +8,11 @@
         <el-form ref="searchFormRef" :model="searchForm">
           <el-form-item label="文章状态：">
             <el-radio v-model="searchForm.status" label>全部</el-radio>
-            <el-radio v-model="searchForm.status" :label="0">草稿</el-radio>
-            <el-radio v-model="searchForm.status" :label="1">待审核</el-radio>
-            <el-radio v-model="searchForm.status" :label="2">审核通过</el-radio>
-            <el-radio v-model="searchForm.status" :label="3">审核失败</el-radio>
-            <el-radio v-model="searchForm.status" :label="4">已删除</el-radio>
+            <el-radio v-model="searchForm.status" label="0">草稿</el-radio>
+            <el-radio v-model="searchForm.status" label="1">待审核</el-radio>
+            <el-radio v-model="searchForm.status" label="2">审核通过</el-radio>
+            <el-radio v-model="searchForm.status" label="3">审核失败</el-radio>
+            <el-radio v-model="searchForm.status" label="4">已删除</el-radio>
           </el-form-item>
           <el-form-item label="频道列表：">
             <el-select v-model="searchForm.channel_id" clearable placeholder="请选择">
@@ -79,15 +79,26 @@ export default {
   },
   watch: {
     //   对timetotime成员进行监听
-    timetotime(newval) {
-      // 把newval的值拆分分别给到 begin_pubdate和end_pubdate 里边
-      if (newval) {
-        // 赋予时间信息
-        this.searchForm.begin_pubdate = newval[0];
-        this.searchForm.end_pubdate = newval[1];
+    timetotime: function (newv, oldv) {
+      console.log(newv,'dsadasd')
+      console.log(oldv,'dasdsadsad')
+      if (newv) {
+        // 拆分时间给到表单
+        this.searchForm.begin_pubdate = newv[0]
+        this.searchForm.end_pubdate = newv[1]
       } else {
-        this.searchForm.begin_pubdate = "";
-        this.searchForm.end_pubdate = "";
+        // 清除表单时间信息
+        this.searchForm.begin_pubdate = ''
+        this.searchForm.end_pubdate = ''
+      }
+    },
+    searchForm:{
+      deep:true,
+      handler:function(newV,oldV){
+        console.log(newV.status)
+        this.searchForm.status = newV.status
+        this.getArticleList()
+        
       }
     }
   },
@@ -95,7 +106,7 @@ export default {
   data() {
     return {
       searchForm: {
-        status: "2", //文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除，不传为全部
+        status: '', //文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除，不传为全部
         begin_pubdate: "", //文章发布开始时间
         end_pubdate: "", //文章发布结束时间
         channel_id: "" ,// 频道
