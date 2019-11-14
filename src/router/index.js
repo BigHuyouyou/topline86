@@ -4,6 +4,7 @@ import Views from '../views/login/index'
 import Home from '../views/home/index'
 import Welcome from '../views/welcome/index'
 import Article from '../views/article/index'
+import ArticleAdd from '../views/articleadd/index'
 
 Vue.use(VueRouter)
 
@@ -31,6 +32,12 @@ const routes = [
         path: '/article',
         name: 'article',
         component: Article
+        // component: () => import('@/views/article')
+      },
+      {
+        path: '/articleadd',
+        name: 'articleadd',
+        component: ArticleAdd
       }
     ]
   }
