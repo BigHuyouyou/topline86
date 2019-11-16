@@ -22,7 +22,18 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="频道：" prop="channel_id">
-            <channel-com @slt="selectHandler" :chid="addForm.channel_id"></channel-com>
+             <el-select
+              v-model="addForm.channel_id"
+              placeholder="请选择"
+              clearable
+            >
+              <el-option
+                v-for="item in channelList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <el-form>
               <el-button type="primary" @click="addarticle(false)">发布</el-button>
@@ -42,16 +53,15 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 // 通过es6按需导入方式 导入需要的组件模块
 import { quillEditor } from 'vue-quill-editor'
-
-import ChannelCom from '@/components/channel.vue'
 export default {
-
+  created () {
+    this.getChannelList()
+  },
   name: 'ArticleAdd',
   components: {
     // 简易成员赋值 quillEditor: quillEditor
     // 组件使用两种方式：<quillEditor></quillEditor> 或 <quill-editor></quill-editor>
-    quillEditor,
-    ChannelCom
+    quillEditor
   },
   data () {
     return {
@@ -67,6 +77,7 @@ export default {
         content: [{ required: true, message: '内容必填' }],
         channel_id: [{ required: true, message: '频道必选' }]
       },
+      channelList: [], // 频道
       addForm: {
         title: '',
         content: '',
@@ -78,10 +89,18 @@ export default {
       }
     }
   },
-
   methods: {
-    selectHandler (val) {
-      this.addForm.channel_id = val
+    getChannelList () {
+      var pro = this.$http.get('/channels')
+      pro
+        .then(result => {
+          if (result.data.message === 'OK') {
+            this.channelList = result.data.data.channels
+          }
+        })
+        .catch(err => {
+          return this.$message.error('获得文章频道错误' + err)
+        })
     },
     addarticle (flag) {
       this.$refs.addFormRef.validate(valid => {
@@ -100,7 +119,6 @@ export default {
         }
       })
     }
-
   }
 
 }

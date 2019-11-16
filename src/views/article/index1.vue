@@ -17,7 +17,19 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="频道列表：">
-           <channel-com @slt="selectHandler"></channel-com>
+            <el-select
+            v-model="searchForm.channel_id"
+            placeholder="请选择"
+            clearable
+            @change="getArticleList()"
+            >
+              <el-option
+                v-for="item in channelList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="时间选择：">
             <el-date-picker
@@ -76,12 +88,11 @@
 </template>
 
 <script>
-import ChannelCom from '@/components/channel.vue'
 export default {
 
   name: 'ArticleList',
   created () {
-    // this.getChannelList()
+    this.getChannelList()
     this.getArticleList()
   },
   watch: {
@@ -99,16 +110,16 @@ export default {
         this.searchForm.end_pubdate = ''
       }
       this.getArticleList()
-    },
-    // 筛选功能第一种方法   第二种方法是el-radio-group
-    searchForm: {
-      deep: true,
-      handler: function (newV, oldV) {
-        // console.log(newV.status)
-        this.searchForm.status = newV.status
-        this.getArticleList()
-      }
     }
+    // 筛选功能第一种方法   第二种方法是el-radio-group
+    // searchForm: {
+    //   deep: true,
+    //   handler: function (newV, oldV) {
+    //     // console.log(newV.status)
+    //     this.searchForm.status = newV.status
+    //     this.getArticleList()
+    //   }
+    // }
   },
 
   data () {
@@ -121,7 +132,7 @@ export default {
         page: 1,
         per_page: 10
       },
-      // channelList: [],
+      channelList: [],
       timetotime: [],
       articleList: [],
       tot: 0// 总记录条数
@@ -130,9 +141,18 @@ export default {
   },
 
   methods: {
-    // 频道组件方法，获得子组件传递过来的频道id并赋予给channel_id成员
-    selectHandler (val) {
-      this.searchForm.channel_id = val
+    getChannelList () {
+      var pro = this.$http.get('/channels')
+      pro
+        .then(result => {
+          console.log(result)
+          if (result.data.message === 'OK') {
+            this.channelList = result.data.data.channels
+          }
+        })
+        .catch(err => {
+          return this.$message.error('获得文章频道错误：' + err)
+        })
     },
     getArticleList () {
       // 把searchForm内部为空的成员都过滤掉
@@ -187,9 +207,6 @@ export default {
           })
       }).catch(() => {})
     }
-  },
-  components: {
-    ChannelCom
   }
 }
 </script>

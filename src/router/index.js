@@ -5,6 +5,8 @@ import Home from '../views/home/index'
 import Welcome from '../views/welcome/index'
 import Article from '../views/article/index'
 import ArticleAdd from '../views/articleadd/index'
+import ArticleEdit from '../views/articleedit/index'
+import Account from '../views/account/index'
 
 Vue.use(VueRouter)
 
@@ -38,6 +40,16 @@ const routes = [
         path: '/articleadd',
         name: 'articleadd',
         component: ArticleAdd
+      },
+      {
+        path: '/articleedit/:aid',
+        name: 'articleedit',
+        component: ArticleEdit
+      },
+      {
+        path: '/account',
+        name: 'account',
+        component: Account
       }
     ]
   }
